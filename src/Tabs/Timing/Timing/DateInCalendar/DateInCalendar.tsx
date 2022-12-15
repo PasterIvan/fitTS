@@ -1,18 +1,15 @@
-import {Time} from './Time/Time';
 import React from 'react';
 import {FlatList, ListRenderItem, Text, View} from 'react-native';
 import tw from 'twrnc';
 import {useAppSelector} from '../../../../hooks/hooks';
 import {TimeType} from '../../../../Types/StateTypes';
-import {TimeContainer} from './Time/TimeContainer';
+import {Time} from './Time/Time';
 
 export const DateInCalendar = () => {
   const selectedDate = useAppSelector(state => state.date.dateForCalendar);
   const times = useAppSelector(state => state.date.date.times);
 
-  const renderTime: ListRenderItem<TimeType> = ({item}) => (
-    <TimeContainer {...item} />
-  );
+  const renderTime: ListRenderItem<TimeType> = ({item}) => <Time {...item} />;
   return (
     <View style={tw`flex-1`}>
       <Text style={tw`text-center`}>
