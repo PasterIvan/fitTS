@@ -1,11 +1,22 @@
 import React from 'react';
-import {FlatList, ListRenderItem, Text, View} from 'react-native';
+import {
+  FlatList,
+  Keyboard,
+  ListRenderItem,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import tw from 'twrnc';
 import {useAppSelector} from '../../../../hooks/hooks';
 import {TimeType} from '../../../../Types/StateTypes';
 import {Time} from './Time/Time';
+import {
+  KeyboardAwareFlatList,
+  KeyboardAwareScrollView,
+} from 'react-native-keyboard-aware-scroll-view';
 
-export const DateInCalendar = () => {
+export const DateInCalendar = React.memo(() => {
   const selectedDate = useAppSelector(state => state.date.dateForCalendar);
   const times = useAppSelector(state => state.date.date.times);
 
@@ -27,4 +38,4 @@ export const DateInCalendar = () => {
       <FlatList data={times} renderItem={renderTime} />
     </View>
   );
-};
+});

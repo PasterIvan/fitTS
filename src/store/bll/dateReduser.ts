@@ -14,20 +14,6 @@ export const getTimesTC = createAsyncThunk(
     }
   },
 );
-export const writeClientTC = createAsyncThunk(
-  'date/writeClient',
-  async (
-    params: {timeId: string; clientId: string; dateId: string},
-    {dispatch},
-  ) => {
-    try {
-      const res = await timeAPI.writeClient(params);
-      dispatch(setTimes(res.data));
-    } catch (error) {
-      console.log(error);
-    }
-  },
-);
 
 export let date = new Date();
 

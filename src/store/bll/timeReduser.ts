@@ -1,5 +1,7 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {ClientType, TimeType, TrainingType} from '../../Types/StateTypes';
+import {timeAPI} from '../../api/api';
+import {setTimes} from './dateReduser';
 
 // THUNKS
 // export const addTimeTC = createAsyncThunk('times', async (param, { dispatch }) => {
@@ -7,13 +9,20 @@ import {ClientType, TimeType, TrainingType} from '../../Types/StateTypes';
 //   // dispatch(setTimes(res.data))
 // })
 
-// export const addClientTC = createAsyncThunk(
-//   'times',
-//   async (nameNewClient: string, {dispatch}) => {
-//     const res = await clientAPI.addClient(nameNewClient);
-//     dispatch(addClient(res.data));
-//   },
-// );
+export const writeClientTC = createAsyncThunk(
+  'time/writeClient',
+  async (
+    params: {timeId: string; clientId: string; dateId: string},
+    {dispatch},
+  ) => {
+    try {
+      const res = await timeAPI.writeClient(params);
+      dispatch(setTimes(res.data));
+    } catch (error) {
+      console.log(error);
+    }
+  },
+);
 
 //SLICE
 const slice = createSlice({

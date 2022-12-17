@@ -2,14 +2,15 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {ClientType} from '../../../../../../../Types/StateTypes';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {clientAPI} from '../../../../../../../api/api';
-import {writeClientTC} from '../../../../../../../store/bll/dateReduser';
 import {useAppDispatch, useAppSelector} from '../../../../../../../hooks/hooks';
 import {FreeTime} from './FreeTime';
+import {setClientFromSearch} from './SearchClient/clientSearchReduser';
+import {writeClientTC} from '../../../../../../../store/bll/timeReduser';
 
-type FreeTimeProps = {
+type FreeTimeContainerProps = {
   timeId: string;
 };
-export const FreeTimeContainer: React.FC<FreeTimeProps> = React.memo(
+export const FreeTimeContainer: React.FC<FreeTimeContainerProps> = React.memo(
   ({timeId}) => {
     const dispatch = useAppDispatch();
     const [isInputWrite, setIsInputWrite] = useState(false);
@@ -17,8 +18,12 @@ export const FreeTimeContainer: React.FC<FreeTimeProps> = React.memo(
     const [clientsFromSearch, setClientsFromSearch] = useState(
       [] as ClientType[],
     );
+
     const dateId = useAppSelector(state => state.date.date.dateId);
-    const {clientId} = useAppSelector(state => state.clientsFromSearch.client);
+    const clientFromSearch = useAppSelector(
+      state => state.clientsFromSearch.client,
+    );
+    const clientId = clientFromSearch.clientId;
 
     const getClientsInSearchTC = createAsyncThunk(
       'clientsSearch',
@@ -46,15 +51,18 @@ export const FreeTimeContainer: React.FC<FreeTimeProps> = React.memo(
     const cancelInputWrite = useCallback(() => {
       setClientNameSearch('');
       setIsInputWrite(false);
-    }, [setIsInputWrite]);
+      dispatch(setClientFromSearch({clientName: '', clientId: ''}));
+    }, [dispatch, setIsInputWrite]);
 
     const writeClient = useCallback(() => {
       dispatch(writeClientTC({clientId, timeId, dateId}));
       setIsInputWrite(false);
+      dispatch(setClientFromSearch({clientName: '', clientId: ''}));
     }, [dispatch, clientId, timeId, dateId]);
 
     return (
       <FreeTime
+        clientFromSearch={clientFromSearch}
         isInputWrite={isInputWrite}
         openInputWrite={openInputWrite}
         cancelInputWrite={cancelInputWrite}

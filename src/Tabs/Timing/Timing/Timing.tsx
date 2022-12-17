@@ -5,7 +5,8 @@ import {DatePicker} from 'react-native-week-month-date-picker';
 import {addDays} from 'date-fns';
 import tw from 'twrnc';
 import {DateInCalendar} from './DateInCalendar/DateInCalendar';
-import {View} from 'react-native';
+import {KeyboardAvoidingView} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export const Timing = () => {
   const dispatch = useAppDispatch();
@@ -41,9 +42,9 @@ export const Timing = () => {
       theme={{
         primaryColor: 'orange',
       }}>
-      <View style={tw`flex-1`}>
+      <KeyboardAwareScrollView scrollToOverflowEnabled={true}>
         <DateInCalendar />
-      </View>
+      </KeyboardAwareScrollView>
     </DatePicker>
   );
 };
