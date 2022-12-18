@@ -2,7 +2,7 @@ import React from 'react';
 import {RootTimingParamList} from '../../Types/TabsNavigationsTypes';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Timing} from './Timing/Timing';
-import {Training} from './Training/Training';
+import {TrainingContainer} from './Training/TrainingContainer';
 
 const TimingStack = createStackNavigator<RootTimingParamList>();
 
@@ -16,7 +16,7 @@ export const RootTiming = () => {
       />
       <TimingStack.Screen
         name={'Training'}
-        component={Training}
+        component={TrainingContainer}
         options={{title: 'Тренировка', headerBackTitle: 'График'}}
       />
     </TimingStack.Navigator>

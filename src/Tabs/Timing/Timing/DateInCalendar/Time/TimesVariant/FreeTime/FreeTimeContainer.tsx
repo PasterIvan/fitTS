@@ -55,7 +55,7 @@ export const FreeTimeContainer: React.FC<FreeTimeContainerProps> = React.memo(
     }, [dispatch, setIsInputWrite]);
 
     const writeClient = useCallback(() => {
-      dispatch(writeClientTC({clientId, timeId, dateId}));
+      dispatch(writeClientTC({timeId, clientId, dateId}));
       setIsInputWrite(false);
       dispatch(setClientFromSearch({clientName: '', clientId: ''}));
     }, [dispatch, clientId, timeId, dateId]);

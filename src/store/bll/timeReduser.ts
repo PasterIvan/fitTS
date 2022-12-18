@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {ClientType, TimeType, TrainingType} from '../../Types/StateTypes';
-import {timeAPI} from '../../api/api';
+import {TimeType} from '../../Types/StateTypes';
+import {timeAPI, trainingAPI} from '../../api/api';
 import {setTimes} from './dateReduser';
 
 // THUNKS
@@ -8,15 +8,39 @@ import {setTimes} from './dateReduser';
 //   const res = await timeAPI.addTime(param)
 //   // dispatch(setTimes(res.data))
 // })
-
+export const getTimeTC = createAsyncThunk(
+  'time/getTime',
+  async (timeId: string, {dispatch}) => {
+    try {
+      const res = await timeAPI.getTime(timeId);
+      dispatch(setTime(res.data));
+    } catch (error) {
+      console.log(error);
+    }
+  },
+);
 export const writeClientTC = createAsyncThunk(
   'time/writeClient',
   async (
-    params: {timeId: string; clientId: string; dateId: string},
+    data: {timeId: string; clientId: string; dateId: string},
     {dispatch},
   ) => {
     try {
-      const res = await timeAPI.writeClient(params);
+      const res = await timeAPI.writeClient(data);
+      dispatch(setTimes(res.data));
+    } catch (error) {
+      console.log(error);
+    }
+  },
+);
+export const addTrainingTC = createAsyncThunk(
+  'time/addTraining',
+  async (
+    data: {trainingTitle: string; timeId: string; dateId: string},
+    {dispatch},
+  ) => {
+    try {
+      const res = await trainingAPI.addTraining(data);
       dispatch(setTimes(res.data));
     } catch (error) {
       console.log(error);
@@ -48,64 +72,15 @@ const slice = createSlice({
     setTime(state, action: PayloadAction<TimeType>) {
       state = action.payload;
     },
-    setClient(state, action: PayloadAction<ClientType>) {
-      state = {...state, client: action.payload};
-    },
-    setTraining(state, action: PayloadAction<TrainingType>) {
-      state = {...state, training: action.payload};
-    },
-    // setClients(state, action) {
-    //   for (let i = 0; i < state.times.length; i++) {
-    //     let timeId = state.times[i].timeId;
-    //     let client = action.payload.find((client: any) =>
-    //       client.timeId.find((time: any) => time === timeId),
-    //     );
-    //     if (client) {
-    //       state.times[i].client = client;
-    //     }
-    //   }
-    // },
-    // setDescription(state, action: PayloadAction<string>) {
-    //   state.training.trainingDescription = action.payload;
-    // state.times = state.times.map((time: any) =>
-    //   time.timeId === action.payload.timeId
-    //     ? {
-    //         ...time,
-    //         training: {
-    //           ...time.training,
-    //           preview: action.payload.trainingPreview,
-    //         },
-    //       }
-    //     : time,
-    // );
-    // },
-    // changeExerciseStatus(state, action) {
-    //   state.times = state.times.map(time =>
-    //     time.timeId === action.payload.timeId
-    //       ? {
-    //           ...time,
-    //           training: {
-    //             ...time.training,
-    //             exercises: state.map(exercise =>
-    //               exercise.exerciseId === action.payload
-    //                 ? (exercise.isDone = !exercise.isDone)
-    //                 : exercise
-    //             ),
-    //           },
-    //         }
-    //       : time
-    //   )
-    // },
   },
 });
 
 export const timeReducer = slice.reducer;
 
-export const {setTime, setClient, setTraining} = slice.actions;
+export const {setTime} = slice.actions;
 
-export type ActionsTypeFromTimesReducer =
-  | ReturnType<typeof setTime>
-  | ReturnType<typeof setClient>
-  // | ReturnType<typeof setClients>
-  | ReturnType<typeof setTraining>;
+export type ActionsTypeFromTimesReducer = ReturnType<typeof setTime>;
+// | ReturnType<typeof setClient>
+// | ReturnType<typeof setClients>
+// | ReturnType<typeof setTraining>;
 // | ReturnType<typeof setPreview>;

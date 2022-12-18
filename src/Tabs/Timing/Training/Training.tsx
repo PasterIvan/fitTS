@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   Button,
   FlatList,
@@ -10,34 +10,35 @@ import {
 } from 'react-native';
 import tw from 'twrnc';
 import {Exercise} from './Exercise/Exercise';
-import {setPreview} from '../../../store/bll/timeReduser';
-import {RootTimingTabProps} from '../../../Types/TabsNavigationsTypes';
-import {useAppDispatch} from '../../../hooks/hooks';
+import {
+  ClientType,
+  ExerciseType,
+  TrainingType,
+} from '../../../Types/StateTypes';
 
-export const Training: React.FC<any> = ({route}: RootTimingTabProps) => {
-  const dispatch = useAppDispatch();
-  const {timeId, time, client, training}: any = route.params;
-  // const exercises = useAppSelector(state => state.exercises)
-  // console.log(exercises)
-  const [isInputPreview, setIsInputPreview] = useState(false);
-  const [trainingPreview, setTrainingPreview] = useState('');
+type TrainingProps = {
+  timeTitle: string;
+  client: ClientType | undefined;
+  training: TrainingType | undefined;
+  isInputPreview: boolean;
+  openInputPreview: () => void;
+  cancelInputPreview: () => void;
+  addPreview: () => void;
+  onChangeInputPreview: (value: string) => void;
+};
 
-  const cancelInputPreview = () => {
-    setTrainingPreview('');
-    setIsInputPreview(false);
-  };
-  const addPreview = (timeId: string) => {
-    dispatch(setPreview({timeId, trainingPreview}));
-    setIsInputPreview(false);
-  };
-
-  const renderExercise: ListRenderItem<any> = ({item}) => (
-    <Exercise
-      exerciseId={item.exerciseId}
-      exerciseName={item.exerciseName}
-      description={item.description}
-      isDone={item.isDone}
-    />
+export const Training: React.FC<TrainingProps> = ({
+  client,
+  training,
+  isInputPreview,
+  timeTitle,
+  openInputPreview,
+  cancelInputPreview,
+  onChangeInputPreview,
+  addPreview,
+}) => {
+  const renderExercise: ListRenderItem<ExerciseType> = ({item}) => (
+    <Exercise {...item} />
   );
   return (
     <View>
@@ -47,23 +48,23 @@ export const Training: React.FC<any> = ({route}: RootTimingTabProps) => {
             style={tw`w-20 h-20 rounded-full`}
             source={require('../../Profile/img/ava-man.png')}
           />
-          <Text style={tw`text-base text-gray-600`}>{client.clientName}</Text>
+          <Text style={tw`text-base text-gray-600`}>{client!.clientName}</Text>
         </View>
         <View style={tw`w-3/4 justify-center`}>
-          <Text style={tw`w-full text-base text-center`}>{time}</Text>
+          <Text style={tw`w-full text-base text-center`}>{timeTitle}</Text>
           <Text style={tw`text-lg font-medium text-center `}>
-            {training.title}
+            {training!.trainingTitle}
           </Text>
-          {training.preview ? (
+          {training!.trainingDescription ? (
             <Text style={tw`py-1 text-center text-gray-600`}>
-              {training.preview}
+              {training!.trainingDescription}
             </Text>
           ) : isInputPreview ? (
             <View>
               <TextInput
                 multiline={true}
                 numberOfLines={3}
-                onChangeText={setTrainingPreview}
+                onChangeText={value => onChangeInputPreview(value)}
                 autoFocus={true}
                 onEndEditing={cancelInputPreview}
               />
@@ -76,7 +77,7 @@ export const Training: React.FC<any> = ({route}: RootTimingTabProps) => {
                 <Button
                   title={'Добавить'}
                   color={'green'}
-                  onPress={() => addPreview(timeId)}
+                  onPress={() => addPreview()}
                 />
               </View>
             </View>
@@ -84,7 +85,7 @@ export const Training: React.FC<any> = ({route}: RootTimingTabProps) => {
             <Button
               title={'Добавить описание'}
               color={'orange'}
-              onPress={() => setIsInputPreview(true)}
+              onPress={openInputPreview}
             />
           )}
         </View>
@@ -92,11 +93,7 @@ export const Training: React.FC<any> = ({route}: RootTimingTabProps) => {
       <Text style={tw`w-full py-2 text-lg font-medium text-center`}>
         Упражнения
       </Text>
-      <FlatList
-        data={training.exercises}
-        renderItem={renderExercise}
-        keyExtractor={exercise => exercise.exerciseId}
-      />
+      <FlatList data={training!.exercises} renderItem={renderExercise} />
       <Button title={'Добавить упражнение'} color={'green'} />
     </View>
   );

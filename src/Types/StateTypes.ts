@@ -26,5 +26,5 @@ export type ExerciseType = {
   exerciseId: string;
   exerciseName: string;
   exerciseDescription: string;
-  idDone: boolean;
+  isDone: boolean;
 };

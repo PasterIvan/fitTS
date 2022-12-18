@@ -1,4 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
+import {TrainingType} from '../../Types/StateTypes';
 
 //THUNKS
 // export const meTC = createAsyncThunk('me', async (id, { dispatch }) => {
@@ -9,17 +10,17 @@ import {createSlice} from '@reduxjs/toolkit';
 
 //SLICE
 const slice = createSlice({
-  name: 'exercises',
-  initialState: [],
+  name: 'training',
+  initialState: {} as TrainingType,
   reducers: {
-    setExercises(state, action) {
+    setTraining(state, action) {
       state = action.payload;
     },
   },
 });
 
-export const exercisesReducer = slice.reducer;
+export const trainingReducer = slice.reducer;
 
-export const {setExercises} = slice.actions;
+export const {setTraining} = slice.actions;
 
-export type ActionsTypeForExercisesReducer = ReturnType<typeof setExercises>;
+export type ActionsTypeForExercisesReducer = ReturnType<typeof setTraining>;

@@ -1,20 +1,9 @@
 import React from 'react';
-import {
-  FlatList,
-  Keyboard,
-  ListRenderItem,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import {FlatList, ListRenderItem, Text, View} from 'react-native';
 import tw from 'twrnc';
 import {useAppSelector} from '../../../../hooks/hooks';
 import {TimeType} from '../../../../Types/StateTypes';
 import {Time} from './Time/Time';
-import {
-  KeyboardAwareFlatList,
-  KeyboardAwareScrollView,
-} from 'react-native-keyboard-aware-scroll-view';
 
 export const DateInCalendar = React.memo(() => {
   const selectedDate = useAppSelector(state => state.date.dateForCalendar);

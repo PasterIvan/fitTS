@@ -13,12 +13,14 @@ import {
   ActionsTypeForClientSearchReducer,
   clientSearchReducer,
 } from '../Tabs/Timing/Timing/DateInCalendar/Time/TimesVariant/FreeTime/SearchClient/clientSearchReduser';
+import {trainingReducer} from './bll/trainingReduser';
 
 export const rootReducer = combineReducers({
   me: meReducer,
   date: dateReducer,
   times: timeReducer,
   clientsFromSearch: clientSearchReducer,
+  training: trainingReducer,
   exercises: exercisesReducer,
 });
 
@@ -33,6 +35,7 @@ store.subscribe(() => {
     me: store.getState().me,
     times: store.getState().times,
     date: store.getState().date,
+    training: store.getState().training,
     exercises: store.getState().exercises,
     clientsFromSearch: store.getState().clientsFromSearch,
   });

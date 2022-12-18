@@ -1,4 +1,4 @@
-import axios, {AxiosResponse} from 'axios';
+import axios from 'axios';
 import {ClientType} from '../Types/StateTypes';
 
 const instance = axios.create({
@@ -27,9 +27,12 @@ export const timeAPI = {
       params,
     });
   },
-  writeClient(params: {timeId: string; clientId: string; dateId: string}) {
-    return instance.post('times', {
-      params,
+  getTime(timeId: string) {
+    return instance.get(`times/${timeId}`);
+  },
+  writeClient(data: {timeId: string; clientId: string; dateId: string}) {
+    return instance.put('times', {
+      data,
     });
   },
 };
@@ -42,6 +45,14 @@ export const clientAPI = {
   },
   addClient(nameNewClient: any) {
     return instance.post('clients', {nameNewClient});
+  },
+};
+
+export const trainingAPI = {
+  addTraining(data: {trainingTitle: string; timeId: string; dateId: string}) {
+    return instance.post('training', {
+      data,
+    });
   },
 };
 
