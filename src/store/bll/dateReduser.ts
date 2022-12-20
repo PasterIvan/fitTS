@@ -1,19 +1,9 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {DateType, TimeType} from '../../Types/StateTypes';
+import {DateType} from '../../Types/StateTypes';
 import {timeAPI} from '../../api/api';
+import {setTimes} from './timesReduser';
 
 //THUNKS
-export const getTimesTC = createAsyncThunk(
-  'date/getTimes',
-  async (params: {dateId: string}, {dispatch}) => {
-    try {
-      const res = await timeAPI.getTimes(params);
-      dispatch(setTimes(res.data));
-    } catch (dateId) {
-      console.log(dateId);
-    }
-  },
-);
 
 export let date = new Date();
 
@@ -24,7 +14,6 @@ const slice = createSlice({
     dateForCalendar: date,
     date: {
       dateId: `${date.getDate()}-${+date.getMonth() + 1}-${date.getFullYear()}`,
-      times: [],
     } as DateType,
   },
   reducers: {
@@ -34,16 +23,11 @@ const slice = createSlice({
         +action.payload.getMonth() + 1
       }-${action.payload.getFullYear()}`;
     },
-    setTimes(state, action: PayloadAction<TimeType[]>) {
-      state.date.times = action.payload;
-    },
   },
 });
 
 export const dateReducer = slice.reducer;
 
-export const {setSelectedDate, setTimes} = slice.actions;
+export const {setSelectedDate} = slice.actions;
 
-export type ActionTypeForDataReducer =
-  | ReturnType<typeof setSelectedDate>
-  | ReturnType<typeof setTimes>;
+export type ActionTypeForDataReducer = ReturnType<typeof setSelectedDate>;

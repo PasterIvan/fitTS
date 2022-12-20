@@ -54,6 +54,14 @@ export const trainingAPI = {
       data,
     });
   },
+  addTrainingDescription(data: {
+    trainingId: string | undefined;
+    trainingDescription: string;
+  }) {
+    return instance.put(`training/${data.trainingId}`, {
+      data,
+    });
+  },
 };
 
 export type GetClientsResponseType = {

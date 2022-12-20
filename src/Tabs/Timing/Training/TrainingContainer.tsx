@@ -1,44 +1,44 @@
 import React, {useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../../hooks/hooks';
 import {Training} from './Training';
-import {TrainingProps} from '../../../Types/TabsNavigationsTypes';
+import {addTrainingDescriptionTC} from '../../../store/bll/timesReduser';
 
-export const TrainingContainer = ({route}: TrainingProps) => {
+export const TrainingContainer = () => {
   const dispatch = useAppDispatch();
-  const {timeId} = route.params;
 
-  const times = useAppSelector(state => state.date.date.times);
+  const {training, timeTitle, client} = useAppSelector(
+    state => state.times.time,
+  );
+  const trainingId = training?.trainingId;
 
-  const selectedTime = times.find(time => time.timeId === timeId);
+  const [isInputDescription, setIsInputDescription] = useState(false);
+  const [trainingDescription, setTrainingDescription] = useState('');
 
-  const [isInputPreview, setIsInputPreview] = useState(false);
-  const [trainingPreview, setTrainingPreview] = useState('');
-
-  const openInputPreview = () => {
-    setIsInputPreview(true);
+  const openInputDescription = () => {
+    setIsInputDescription(true);
   };
-  const onChangeInputPreview = (value: string) => {
-    setTrainingPreview(value);
+  const onChangeInputDescription = (value: string) => {
+    setTrainingDescription(value);
   };
-  const cancelInputPreview = () => {
-    setTrainingPreview('');
-    setIsInputPreview(false);
+  const cancelInputDescription = () => {
+    setTrainingDescription('');
+    setIsInputDescription(false);
   };
-  const addPreview = () => {
-    // dispatch(setPreview({timeId, trainingPreview}));
-    setIsInputPreview(false);
+  const addTrainingDescription = () => {
+    dispatch(addTrainingDescriptionTC({trainingId, trainingDescription}));
+    setIsInputDescription(false);
   };
 
   return (
     <Training
-      training={selectedTime!.training}
-      client={selectedTime!.client}
-      addPreview={addPreview}
-      onChangeInputPreview={onChangeInputPreview}
-      cancelInputPreview={cancelInputPreview}
-      isInputPreview={isInputPreview}
-      timeTitle={selectedTime!.timeTitle}
-      openInputPreview={openInputPreview}
+      training={training}
+      client={client}
+      addDescription={addTrainingDescription}
+      onChangeInputDescription={onChangeInputDescription}
+      cancelInputDescription={cancelInputDescription}
+      isInputDescription={isInputDescription}
+      timeTitle={timeTitle}
+      openInputDescription={openInputDescription}
     />
   );
 };

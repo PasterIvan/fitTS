@@ -20,22 +20,22 @@ type TrainingProps = {
   timeTitle: string;
   client: ClientType | undefined;
   training: TrainingType | undefined;
-  isInputPreview: boolean;
-  openInputPreview: () => void;
-  cancelInputPreview: () => void;
-  addPreview: () => void;
-  onChangeInputPreview: (value: string) => void;
+  isInputDescription: boolean;
+  openInputDescription: () => void;
+  cancelInputDescription: () => void;
+  addDescription: () => void;
+  onChangeInputDescription: (value: string) => void;
 };
 
 export const Training: React.FC<TrainingProps> = ({
   client,
   training,
-  isInputPreview,
+  isInputDescription,
   timeTitle,
-  openInputPreview,
-  cancelInputPreview,
-  onChangeInputPreview,
-  addPreview,
+  openInputDescription,
+  cancelInputDescription,
+  onChangeInputDescription,
+  addDescription,
 }) => {
   const renderExercise: ListRenderItem<ExerciseType> = ({item}) => (
     <Exercise {...item} />
@@ -48,36 +48,36 @@ export const Training: React.FC<TrainingProps> = ({
             style={tw`w-20 h-20 rounded-full`}
             source={require('../../Profile/img/ava-man.png')}
           />
-          <Text style={tw`text-base text-gray-600`}>{client!.clientName}</Text>
+          <Text style={tw`text-base text-gray-600`}>{client?.clientName}</Text>
         </View>
         <View style={tw`w-3/4 justify-center`}>
           <Text style={tw`w-full text-base text-center`}>{timeTitle}</Text>
           <Text style={tw`text-lg font-medium text-center `}>
-            {training!.trainingTitle}
+            {training?.trainingTitle}
           </Text>
-          {training!.trainingDescription ? (
+          {training?.trainingDescription ? (
             <Text style={tw`py-1 text-center text-gray-600`}>
               {training!.trainingDescription}
             </Text>
-          ) : isInputPreview ? (
+          ) : isInputDescription ? (
             <View>
               <TextInput
                 multiline={true}
                 numberOfLines={3}
-                onChangeText={value => onChangeInputPreview(value)}
+                onChangeText={value => onChangeInputDescription(value)}
                 autoFocus={true}
-                onEndEditing={cancelInputPreview}
+                onEndEditing={cancelInputDescription}
               />
               <View style={tw`flex-row justify-center`}>
                 <Button
                   title={'Отмена'}
                   color={'red'}
-                  onPress={cancelInputPreview}
+                  onPress={cancelInputDescription}
                 />
                 <Button
                   title={'Добавить'}
                   color={'green'}
-                  onPress={() => addPreview()}
+                  onPress={() => addDescription()}
                 />
               </View>
             </View>
@@ -85,7 +85,7 @@ export const Training: React.FC<TrainingProps> = ({
             <Button
               title={'Добавить описание'}
               color={'orange'}
-              onPress={openInputPreview}
+              onPress={openInputDescription}
             />
           )}
         </View>
@@ -93,7 +93,7 @@ export const Training: React.FC<TrainingProps> = ({
       <Text style={tw`w-full py-2 text-lg font-medium text-center`}>
         Упражнения
       </Text>
-      <FlatList data={training!.exercises} renderItem={renderExercise} />
+      <FlatList data={training?.exercises} renderItem={renderExercise} />
       <Button title={'Добавить упражнение'} color={'green'} />
     </View>
   );

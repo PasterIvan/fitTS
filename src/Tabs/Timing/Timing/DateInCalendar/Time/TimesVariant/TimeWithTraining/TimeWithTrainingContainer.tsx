@@ -5,7 +5,7 @@ import {
   useAppDispatch,
   useAppNavigation,
 } from '../../../../../../../hooks/hooks';
-import {setTime} from '../../../../../../../store/bll/timeReduser';
+import {getTimeTC} from '../../../../../../../store/bll/timesReduser';
 
 type TimeWithTrainingContainerProps = {
   time: TimeType;
@@ -17,8 +17,8 @@ export const TimeWithTrainingContainer: React.FC<
   const dispatch = useAppDispatch();
   const navigation = useAppNavigation();
   const watchTraining = () => {
-    dispatch(setTime(time));
-    navigation.navigate('TimingTab', {screen: 'Training', params: time});
+    dispatch(getTimeTC(time.timeId));
+    navigation.navigate('TimingTab', {screen: 'Training'});
   };
 
   return (

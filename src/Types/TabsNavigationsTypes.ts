@@ -24,7 +24,7 @@ export type RootProfileParamList = {
 };
 export type RootTimingParamList = {
   Timing: undefined;
-  Training: TimeType;
+  Training: undefined;
 };
 
 export type AuthTabProps = NativeStackScreenProps<RootTabParamList, 'AuthTab'>;

@@ -5,7 +5,7 @@ import {clientAPI} from '../../../../../../../api/api';
 import {useAppDispatch, useAppSelector} from '../../../../../../../hooks/hooks';
 import {FreeTime} from './FreeTime';
 import {setClientFromSearch} from './SearchClient/clientSearchReduser';
-import {writeClientTC} from '../../../../../../../store/bll/timeReduser';
+import {writeClientTC} from '../../../../../../../store/bll/timesReduser';
 
 type FreeTimeContainerProps = {
   timeId: string;

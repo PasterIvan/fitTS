@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../../../../../../hooks/hooks';
-import {addTrainingTC} from '../../../../../../../store/bll/timeReduser';
+import {addTrainingTC} from '../../../../../../../store/bll/timesReduser';
 import {TimeWithClient} from './TimeWithClient';
 import {ClientType} from '../../../../../../../Types/StateTypes';
 

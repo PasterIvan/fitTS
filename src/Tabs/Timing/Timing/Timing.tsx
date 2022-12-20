@@ -1,11 +1,12 @@
 import {useAppDispatch, useAppSelector} from '../../../hooks/hooks';
 import React, {useCallback, useEffect} from 'react';
-import {getTimesTC, setSelectedDate} from '../../../store/bll/dateReduser';
+import {setSelectedDate} from '../../../store/bll/dateReduser';
 import {DatePicker} from 'react-native-week-month-date-picker';
 import {addDays} from 'date-fns';
 import tw from 'twrnc';
 import {DateInCalendar} from './DateInCalendar/DateInCalendar';
 import {KeyboardAvoidingView} from 'react-native';
+import {getTimesTC} from '../../../store/bll/timesReduser';
 
 export const Timing = () => {
   const dispatch = useAppDispatch();
@@ -16,7 +17,7 @@ export const Timing = () => {
 
   useEffect(() => {
     dispatch(getTimesTC({dateId}));
-  }, [dispatch, dateId]);
+  }, [dateId]);
 
   const setDate = useCallback(
     (date: any) => {

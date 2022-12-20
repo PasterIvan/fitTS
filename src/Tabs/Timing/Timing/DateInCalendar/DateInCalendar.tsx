@@ -5,9 +5,9 @@ import {useAppSelector} from '../../../../hooks/hooks';
 import {TimeType} from '../../../../Types/StateTypes';
 import {Time} from './Time/Time';
 
-export const DateInCalendar = React.memo(() => {
+export const DateInCalendar = () => {
   const selectedDate = useAppSelector(state => state.date.dateForCalendar);
-  const times = useAppSelector(state => state.date.date.times);
+  const times = useAppSelector(state => state.times.times);
 
   const renderTime: ListRenderItem<TimeType> = ({item}) => <Time {...item} />;
   return (
@@ -27,4 +27,4 @@ export const DateInCalendar = React.memo(() => {
       <FlatList data={times} renderItem={renderTime} />
     </View>
   );
-});
+};

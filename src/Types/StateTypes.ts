@@ -18,8 +18,8 @@ export type TrainingType = {
   timeId: string;
   trainingId: string;
   trainingTitle: string;
-  trainingDescription: string;
-  exercises: ExerciseType[];
+  trainingDescription?: string;
+  exercises?: ExerciseType[];
 };
 export type ExerciseType = {
   trainingId: string;

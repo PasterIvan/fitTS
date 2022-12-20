@@ -3,7 +3,7 @@ import {combineReducers} from 'redux';
 import {ActionsTypeForMeReducer, meReducer} from './bll/meReduser';
 import {getData, storeData} from '../utils/sessionStorage-utils';
 import thunkMiddleware from 'redux-thunk';
-import {ActionsTypeFromTimesReducer, timeReducer} from './bll/timeReduser';
+import {ActionsTypeFromTimesReducer, timesReducer} from './bll/timesReduser';
 import {ActionTypeForDataReducer, dateReducer} from './bll/dateReduser';
 import {
   ActionsTypeForExercisesReducer,
@@ -18,7 +18,7 @@ import {trainingReducer} from './bll/trainingReduser';
 export const rootReducer = combineReducers({
   me: meReducer,
   date: dateReducer,
-  times: timeReducer,
+  times: timesReducer,
   clientsFromSearch: clientSearchReducer,
   training: trainingReducer,
   exercises: exercisesReducer,
@@ -33,8 +33,8 @@ export const store = configureStore({
 store.subscribe(() => {
   storeData({
     me: store.getState().me,
-    times: store.getState().times,
     date: store.getState().date,
+    times: store.getState().times,
     training: store.getState().training,
     exercises: store.getState().exercises,
     clientsFromSearch: store.getState().clientsFromSearch,
