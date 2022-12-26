@@ -1,7 +1,8 @@
 import React from 'react';
 import {ClientType} from '../../../../../../../Types/StateTypes';
-import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import tw from 'twrnc';
+import {CustomTextInput} from '../../../../../../../common/TextInput/CustomTextInput';
 
 type TimeWithClientProps = {
   client: ClientType;
@@ -30,31 +31,11 @@ export const TimeWithClient: React.FC<TimeWithClientProps> = ({
         <Text style={tw`text-gray-600`}>{client.clientName}</Text>
       </View>
       {isInputTraining ? (
-        <View style={tw`flex-row w-13/25 pr-2 text-base items-center`}>
-          <TextInput
-            style={tw`w-15/25 h-full text-left mr-4`}
-            multiline={true}
-            numberOfLines={3}
-            onChangeText={value => onChangeInput(value)}
-            autoFocus={true}
-            onEndEditing={cancelInputTraining}
-          />
-          <View style={tw` items-center`}>
-            <TouchableOpacity onPress={cancelInputTraining}>
-              <Text style={tw`px-2 pb-2 w-full text-base text-red-700`}>
-                Отмена
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                addTraining();
-              }}>
-              <Text style={tw`px-2 w-full text-base text-green-700`}>
-                Добавить
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <CustomTextInput
+          onChangeInput={onChangeInput}
+          cancelInput={cancelInputTraining}
+          action={addTraining}
+        />
       ) : (
         <TouchableOpacity onPress={openInputTraining}>
           <Text style={tw`px-5 w-full text-base text-orange-400`}>

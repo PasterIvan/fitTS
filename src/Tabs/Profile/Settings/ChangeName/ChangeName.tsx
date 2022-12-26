@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-// import { Button, Text, TextInput, View } from 'react-native'
+import React from 'react';
+// import { Button, Text, CustomTextInput, View } from 'react-native'
 // import { useDispatch, useSelector } from 'react-redux'
 // import { setName } from '../../../../store/bll/meReduser'
 // import tw from 'twrnc'
@@ -14,13 +14,13 @@ import React, {useState} from 'react';
 //   }
 //   return (
 //     <View>
-//       <TextInput
+//       <CustomTextInput
 //         style={tw`text-lg leading-5 h-10 text-center px-2 border-b border-gray-600`}
 //         onChangeText={changeName}
 //         autoFocus={true}
 //       >
 //         {newName}
-//       </TextInput>
+//       </CustomTextInput>
 //       <Text style={tw`px-2 py-1 opacity-50`}>
 //         Нажмите "ОК" чтобы сохранить новое имя или "Настройки", если хотите оставить предыщущее.
 //       </Text>

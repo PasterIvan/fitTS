@@ -49,6 +49,9 @@ export const clientAPI = {
 };
 
 export const trainingAPI = {
+  getTraining(trainingId: string) {
+    return instance.get(`training/${trainingId}`);
+  },
   addTraining(data: {trainingTitle: string; timeId: string; dateId: string}) {
     return instance.post('training', {
       data,
@@ -59,6 +62,23 @@ export const trainingAPI = {
     trainingDescription: string;
   }) {
     return instance.put(`training/${data.trainingId}`, {
+      data,
+    });
+  },
+};
+
+export const exerciseAPI = {
+  addExercise(data: {trainingId: string | undefined; exerciseName: string}) {
+    return instance.post('exercise', {
+      data,
+    });
+  },
+  changeExerciseStatus(data: {
+    trainingId: string | undefined;
+    exerciseId: string;
+  }) {
+    const exerciseId = data.exerciseId;
+    return instance.put(`exercise/${exerciseId}`, {
       data,
     });
   },

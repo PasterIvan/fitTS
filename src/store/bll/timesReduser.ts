@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {TimeType, TrainingType} from '../../Types/StateTypes';
+import {TimeType} from '../../Types/StateTypes';
 import {timeAPI, trainingAPI} from '../../api/api';
 
 // THUNKS
@@ -8,9 +8,10 @@ export const getTimesTC = createAsyncThunk(
   async (params: {dateId: string}, {dispatch}) => {
     try {
       const res = await timeAPI.getTimes(params);
+
       dispatch(setTimes(res.data));
-    } catch (dateId) {
-      console.log(dateId);
+    } catch (err) {
+      console.log(err);
     }
   },
 );
@@ -53,20 +54,6 @@ export const addTrainingTC = createAsyncThunk(
     }
   },
 );
-export const addTrainingDescriptionTC = createAsyncThunk(
-  'times/addTrainingDescription',
-  async (
-    data: {trainingId: string | undefined; trainingDescription: string},
-    {dispatch},
-  ) => {
-    try {
-      const res = await trainingAPI.addTrainingDescription(data);
-      dispatch(setTrainingInTime(res.data));
-    } catch (error) {
-      console.log(error);
-    }
-  },
-);
 
 //SLICE
 const slice = createSlice({
@@ -82,19 +69,15 @@ const slice = createSlice({
     setTime(state, action: PayloadAction<TimeType>) {
       state.time = action.payload;
     },
-    setTrainingInTime(state, action: PayloadAction<TrainingType>) {
-      state.time = {...state.time, training: action.payload};
-    },
   },
 });
 
 export const timesReducer = slice.reducer;
 
-export const {setTime, setTimes, setTrainingInTime} = slice.actions;
+export const {setTime, setTimes} = slice.actions;
 
 export type ActionsTypeFromTimesReducer =
   | ReturnType<typeof setTime>
-  | ReturnType<typeof setTrainingInTime>
   | ReturnType<typeof setTimes>;
 // | ReturnType<typeof setClient>
 // | ReturnType<typeof setClients>

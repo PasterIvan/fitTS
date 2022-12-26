@@ -13,7 +13,10 @@ import {
   ActionsTypeForClientSearchReducer,
   clientSearchReducer,
 } from '../Tabs/Timing/Timing/DateInCalendar/Time/TimesVariant/FreeTime/SearchClient/clientSearchReduser';
-import {trainingReducer} from './bll/trainingReduser';
+import {
+  ActionsTypeForTrainingReducer,
+  trainingReducer,
+} from './bll/trainingReduser';
 
 export const rootReducer = combineReducers({
   me: meReducer,
@@ -48,7 +51,9 @@ export type ActionsType =
   | ActionsTypeForMeReducer
   | ActionsTypeFromTimesReducer
   | ActionsTypeForExercisesReducer
+  | ActionsTypeForTrainingReducer
   | ActionsTypeForClientSearchReducer;
+
 export type AppStateType = ReturnType<typeof rootReducer>;
 export type AppStoreType = typeof store;
 // @ts-ignore

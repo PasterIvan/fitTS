@@ -1,37 +1,56 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../../hooks/hooks';
 import {Training} from './Training';
-import {addTrainingDescriptionTC} from '../../../store/bll/timesReduser';
+import {
+  addTrainingDescriptionTC,
+  getTrainingTC,
+} from '../../../store/bll/trainingReduser';
+import {TrainingProps} from '../../../Types/TabsNavigationsTypes';
 
-export const TrainingContainer = () => {
+export const TrainingContainer = ({route}: TrainingProps) => {
   const dispatch = useAppDispatch();
+  const {timeTitle, client, trainingId} = route.params;
 
-  const {training, timeTitle, client} = useAppSelector(
-    state => state.times.time,
+  useEffect(() => {
+    dispatch(getTrainingTC(trainingId));
+  }, []);
+
+  const {trainingTitle, trainingDescription} = useAppSelector(
+    state => state.training.training,
   );
-  const trainingId = training?.trainingId;
 
   const [isInputDescription, setIsInputDescription] = useState(false);
-  const [trainingDescription, setTrainingDescription] = useState('');
+  const [newTrainingDescription, setNewTrainingDescription] = useState('');
+  // const [exerciseName, setExerciseName] = useState('12313');
 
   const openInputDescription = () => {
     setIsInputDescription(true);
   };
   const onChangeInputDescription = (value: string) => {
-    setTrainingDescription(value);
+    setNewTrainingDescription(value);
   };
   const cancelInputDescription = () => {
-    setTrainingDescription('');
+    setNewTrainingDescription('');
     setIsInputDescription(false);
   };
   const addTrainingDescription = () => {
-    dispatch(addTrainingDescriptionTC({trainingId, trainingDescription}));
+    dispatch(
+      addTrainingDescriptionTC({
+        trainingId,
+        trainingDescription: newTrainingDescription,
+      }),
+    );
     setIsInputDescription(false);
   };
+  // const addExercise = () => {
+  //   dispatch(addExerciseTC({trainingId, exerciseName}));
+  //   // setIsInputDescription(false);
+  // };
 
   return (
     <Training
-      training={training}
+      trainingTitle={trainingTitle}
+      trainingDescription={trainingDescription}
       client={client}
       addDescription={addTrainingDescription}
       onChangeInputDescription={onChangeInputDescription}
@@ -39,6 +58,8 @@ export const TrainingContainer = () => {
       isInputDescription={isInputDescription}
       timeTitle={timeTitle}
       openInputDescription={openInputDescription}
+      // exercises={exercises}
+      // addExercise={addExercise}
     />
   );
 };

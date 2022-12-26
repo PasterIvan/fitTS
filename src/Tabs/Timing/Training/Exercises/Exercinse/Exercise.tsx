@@ -2,22 +2,27 @@ import React from 'react';
 import {Text, View} from 'react-native';
 import tw from 'twrnc';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
-import {ExerciseType} from '../../../../Types/StateTypes';
+import {ExerciseStatuses} from '../../../../../Types/StateTypes';
 
-export const Exercise = ({
+type ExerciseComponentType = {
+  exerciseName: string;
+  exerciseDescription?: string;
+  isDone: ExerciseStatuses;
+  changeStatus: () => void;
+};
+
+export const Exercise: React.FC<ExerciseComponentType> = ({
   exerciseName,
   exerciseDescription,
   isDone,
-}: ExerciseType) => {
-  // const dispatch = useAppDispatch();
-  // const changeStatus = (exerciseId: string) => {
-  //   // dispatch(changeExerciseStatus(exerciseId))
-  // };
+  changeStatus,
+}) => {
   return (
     <View style={tw`px-5 py-2 items-center flex-row`}>
       <BouncyCheckbox
-        isChecked={isDone}
-        // onPress={() => changeStatus(exerciseId)}
+        disableBuiltInState={true}
+        isChecked={isDone === ExerciseStatuses.Completed}
+        onPress={changeStatus}
         fillColor="orange"
       />
       <View>

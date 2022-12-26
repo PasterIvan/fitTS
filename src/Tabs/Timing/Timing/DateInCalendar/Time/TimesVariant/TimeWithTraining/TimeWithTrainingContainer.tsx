@@ -1,11 +1,7 @@
 import React from 'react';
 import {TimeWithTraining} from './TimeWithTraining';
 import {TimeType} from '../../../../../../../Types/StateTypes';
-import {
-  useAppDispatch,
-  useAppNavigation,
-} from '../../../../../../../hooks/hooks';
-import {getTimeTC} from '../../../../../../../store/bll/timesReduser';
+import {useAppNavigation} from '../../../../../../../hooks/hooks';
 
 type TimeWithTrainingContainerProps = {
   time: TimeType;
@@ -14,11 +10,17 @@ type TimeWithTrainingContainerProps = {
 export const TimeWithTrainingContainer: React.FC<
   TimeWithTrainingContainerProps
 > = ({time}) => {
-  const dispatch = useAppDispatch();
   const navigation = useAppNavigation();
+  const trainingId = time.training!.trainingId;
   const watchTraining = () => {
-    dispatch(getTimeTC(time.timeId));
-    navigation.navigate('TimingTab', {screen: 'Training'});
+    navigation.navigate('TimingTab', {
+      screen: 'Training',
+      params: {
+        timeTitle: time.timeTitle,
+        client: time.client!,
+        trainingId: trainingId,
+      },
+    });
   };
 
   return (

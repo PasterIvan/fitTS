@@ -5,11 +5,11 @@ import {
   ListRenderItem,
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import tw from 'twrnc';
+import {CustomTextInput} from '../../../../../../../common/TextInput/CustomTextInput';
 import {ClientType} from '../../../../../../../Types/StateTypes';
 import {ClientsInSearch} from './SearchClient/ClientsInSearch';
 
@@ -63,26 +63,11 @@ export const FreeTime: React.FC<FreeTimeProps> = React.memo(
           ) : (
             ''
           )}
-          <TextInput
-            style={
-              clientFromSearch.clientName !== ''
-                ? tw`w-9/25 text-left mr-4`
-                : tw`w-17/25 text-left mr-4`
-            }
-            multiline={true}
-            numberOfLines={3}
-            onChangeText={value => onChangeInput(value)}
-            autoFocus={true}
-            onEndEditing={cancelInputWrite}
+          <CustomTextInput
+            onChangeInput={onChangeInput}
+            cancelInput={cancelInputWrite}
+            action={writeClient}
           />
-          <TouchableOpacity onPress={() => cancelInputWrite()}>
-            <Text style={tw`px-2 w-full text-base text-red-700`}>Отмена</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={writeClient}>
-            <Text style={tw`px-2 w-full text-base text-green-700`}>
-              Записать
-            </Text>
-          </TouchableOpacity>
         </View>
         <ScrollView
           style={tw`bg-orange-400 rounded-lg px-2 w-full max-h-50 text-base text-green-700`}>

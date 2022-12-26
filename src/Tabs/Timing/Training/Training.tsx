@@ -1,35 +1,27 @@
 import React from 'react';
-import {
-  Button,
-  FlatList,
-  Image,
-  ListRenderItem,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import {Button, Image, Text, TextInput, View} from 'react-native';
 import tw from 'twrnc';
-import {Exercise} from './Exercise/Exercise';
-import {
-  ClientType,
-  ExerciseType,
-  TrainingType,
-} from '../../../Types/StateTypes';
+import {ClientType} from '../../../Types/StateTypes';
+import {ExercisesContainer} from './Exercises/ExercisesContainer';
 
 type TrainingProps = {
   timeTitle: string;
   client: ClientType | undefined;
-  training: TrainingType | undefined;
+  trainingTitle: string;
+  trainingDescription: string | undefined;
   isInputDescription: boolean;
   openInputDescription: () => void;
   cancelInputDescription: () => void;
   addDescription: () => void;
   onChangeInputDescription: (value: string) => void;
+  // exercises: ExerciseType[] | undefined;
+  // addExercise: () => void;
 };
 
 export const Training: React.FC<TrainingProps> = ({
   client,
-  training,
+  trainingTitle,
+  trainingDescription,
   isInputDescription,
   timeTitle,
   openInputDescription,
@@ -37,11 +29,8 @@ export const Training: React.FC<TrainingProps> = ({
   onChangeInputDescription,
   addDescription,
 }) => {
-  const renderExercise: ListRenderItem<ExerciseType> = ({item}) => (
-    <Exercise {...item} />
-  );
   return (
-    <View>
+    <View style={tw`flex-1`}>
       <View style={tw`flex-row px-5 pt-2 border-b border-gray-600`}>
         <View style={tw` pr-2 items-center`}>
           <Image
@@ -53,11 +42,11 @@ export const Training: React.FC<TrainingProps> = ({
         <View style={tw`w-3/4 justify-center`}>
           <Text style={tw`w-full text-base text-center`}>{timeTitle}</Text>
           <Text style={tw`text-lg font-medium text-center `}>
-            {training?.trainingTitle}
+            {trainingTitle}
           </Text>
-          {training?.trainingDescription ? (
+          {trainingDescription ? (
             <Text style={tw`py-1 text-center text-gray-600`}>
-              {training!.trainingDescription}
+              {trainingDescription}
             </Text>
           ) : isInputDescription ? (
             <View>
@@ -90,11 +79,7 @@ export const Training: React.FC<TrainingProps> = ({
           )}
         </View>
       </View>
-      <Text style={tw`w-full py-2 text-lg font-medium text-center`}>
-        Упражнения
-      </Text>
-      <FlatList data={training?.exercises} renderItem={renderExercise} />
-      <Button title={'Добавить упражнение'} color={'green'} />
+      <ExercisesContainer />
     </View>
   );
 };

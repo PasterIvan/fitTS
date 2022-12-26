@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {StackScreenProps} from '@react-navigation/stack';
-import {TimeType} from './StateTypes';
+import {ClientType} from './StateTypes';
 
 export type RootTabParamList = {
   AuthTab: NavigatorScreenParams<RootAuthParamList>;
@@ -24,7 +24,7 @@ export type RootProfileParamList = {
 };
 export type RootTimingParamList = {
   Timing: undefined;
-  Training: undefined;
+  Training: {client: ClientType; timeTitle: string; trainingId: string};
 };
 
 export type AuthTabProps = NativeStackScreenProps<RootTabParamList, 'AuthTab'>;

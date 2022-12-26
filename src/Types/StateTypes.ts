@@ -22,9 +22,14 @@ export type TrainingType = {
   exercises?: ExerciseType[];
 };
 export type ExerciseType = {
-  trainingId: string;
   exerciseId: string;
   exerciseName: string;
-  exerciseDescription: string;
-  isDone: boolean;
+  exerciseDescription?: string;
+  isDone: ExerciseStatuses;
 };
+export enum ExerciseStatuses {
+  New,
+  InProgress,
+  Completed,
+  Draft,
+}
