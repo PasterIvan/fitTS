@@ -19,7 +19,7 @@ type FreeTimeProps = {
   cancelInputWrite: () => void;
   onChangeInput: (value: string) => void;
   writeClient: () => void;
-  clientsFromSearch: ClientType[];
+  // clientsFromSearch: ClientType[];
   clientFromSearch: ClientType;
 };
 
@@ -30,12 +30,9 @@ export const FreeTime: React.FC<FreeTimeProps> = React.memo(
     cancelInputWrite,
     onChangeInput,
     writeClient,
-    clientsFromSearch,
+    // clientsFromSearch,
     clientFromSearch,
   }) => {
-    const renderClient: ListRenderItem<ClientType> = ({item}) => (
-      <ClientsInSearch {...item} />
-    );
     return !isInputWrite ? (
       <View>
         <View style={tw`w-full flex-row items-center`}>
@@ -69,10 +66,6 @@ export const FreeTime: React.FC<FreeTimeProps> = React.memo(
             action={writeClient}
           />
         </View>
-        <ScrollView
-          style={tw`bg-orange-400 rounded-lg px-2 w-full max-h-50 text-base text-green-700`}>
-          <FlatList data={clientsFromSearch} renderItem={renderClient} />
-        </ScrollView>
       </View>
     );
   },
