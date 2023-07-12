@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {TimeType} from '../../Types/StateTypes';
-import {timeAPI, trainingAPI} from '../../api/api';
+import {NewTimeType, TimeType} from '../../Types/StateTypes';
+import {timeAPI, myTrainingAPI} from '../../api/api';
+import {requestStatus, setAppStatus} from './appReducer';
 
 // THUNKS
 export const getTimesTC = createAsyncThunk(
@@ -28,12 +29,37 @@ export const getTimeTC = createAsyncThunk(
 );
 export const writeClientTC = createAsyncThunk(
   'times/writeClient',
-  async (
-    data: {timeId: string; clientId: string; dateId: string},
-    {dispatch},
-  ) => {
+  async (params: {time: TimeType; clientId: string}, {dispatch}) => {
     try {
-      const res = await timeAPI.writeClient(data);
+      const newTime: NewTimeType = {
+        timeTitle: params.time.timeTitle,
+        clientId: params.clientId,
+      };
+      const res = await timeAPI.updateTime(
+        params.time.timeId,
+        newTime,
+        params.time.dateId,
+      );
+      dispatch(setTimes(res.data));
+    } catch (error) {
+      console.log(error);
+    }
+  },
+);
+export const writeTrainingTC = createAsyncThunk(
+  'times/writeTraining',
+  async (params: {time: TimeType; trainingId: string}, {dispatch}) => {
+    try {
+      const newTime: NewTimeType = {
+        timeTitle: params.time.timeTitle,
+        clientId: params.time.client?.clientId,
+        trainingId: params.trainingId,
+      };
+      const res = await timeAPI.updateTime(
+        params.time.timeId,
+        newTime,
+        params.time.dateId,
+      );
       dispatch(setTimes(res.data));
     } catch (error) {
       console.log(error);
@@ -42,15 +68,30 @@ export const writeClientTC = createAsyncThunk(
 );
 export const addTrainingTC = createAsyncThunk(
   'times/addTraining',
-  async (
-    data: {trainingTitle: string; timeId: string; dateId: string},
-    {dispatch},
-  ) => {
+  async (data: {trainingTitle: string}, {dispatch}) => {
     try {
-      const res = await trainingAPI.addTraining(data);
-      dispatch(setTimes(res.data));
+      const res = await myTrainingAPI.addTraining(data);
+      console.log(res.data);
     } catch (error) {
       console.log(error);
+    }
+  },
+);
+export const repealTrainingTC = createAsyncThunk(
+  'times/repealTraining',
+  async (time: TimeType, {dispatch}) => {
+    try {
+      dispatch(setAppStatus(requestStatus.LOADING));
+
+      const newTime: NewTimeType = {
+        timeTitle: time.timeTitle,
+      };
+      const res = await timeAPI.updateTime(time.timeId, newTime, time.dateId);
+      dispatch(setTimes(res.data));
+      dispatch(setAppStatus(requestStatus.SUCCEEDED));
+    } catch (error) {
+      console.log(error);
+      dispatch(setAppStatus(requestStatus.SUCCEEDED));
     }
   },
 );

@@ -1,20 +1,26 @@
-import React, {useRef} from 'react';
-import {FlatList, ListRenderItem, Text, View} from 'react-native';
+import React from 'react';
+import {ListRenderItem, Text, View} from 'react-native';
 import tw from 'twrnc';
 import {useAppSelector} from '../../../../hooks/hooks';
+import {Time} from './Time/Time';
 import {TimeType} from '../../../../Types/StateTypes';
-import {TimeContainer} from './Time/TimeContainer';
-import {ScrollView} from 'react-native-gesture-handler';
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 export const DateInCalendar = () => {
   const selectedDate = useAppSelector(state => state.date.dateForCalendar);
   const times = useAppSelector(state => state.times.times);
+  const scrollY = useSharedValue(0);
 
-  const scrollRef = useRef(null);
+  const scrollHandler = useAnimatedScrollHandler(event => {
+    scrollY.value = event.contentOffset.y;
+  });
 
-  // const renderTime: ListRenderItem<TimeType> = ({item}) => (
-  //   <TimeContainer {...item} />
-  // );
+  const renderTime: ListRenderItem<TimeType> = ({item}) => (
+    <Time scrollY={scrollY} {...item} />
+  );
   return (
     <View style={tw`flex-1`}>
       <Text style={tw`text-center`}>
@@ -29,12 +35,22 @@ export const DateInCalendar = () => {
         <Text style={tw` w-8/25 text-center`}>Тренировка</Text>
         <Text style={tw` w-4/14 text-center`}>Описание</Text>
       </View>
-      <ScrollView ref={scrollRef}>
-        {times.map(t => (
-          <TimeContainer time={t} simultaneousHandlers={scrollRef} />
-        ))}
-      </ScrollView>
-      {/*<FlatList ref={scrollRef} data={times} renderItem={renderTime} />*/}
+      {/*<ScrollView ref={scrollRef}>*/}
+      {/*  {times.map(time => (*/}
+      {/*    <Time*/}
+      {/*      key={time.timeId}*/}
+      {/*      time={time}*/}
+      {/*      simultaneousHandlers={scrollRef}*/}
+      {/*    />*/}
+      {/*  ))}*/}
+      {/*</ScrollView>*/}
+      <Animated.FlatList
+        data={times}
+        renderItem={renderTime}
+        style={{flex: 1}}
+        onScroll={scrollHandler}
+        scrollEventThrottle={16}
+      />
     </View>
   );
 };

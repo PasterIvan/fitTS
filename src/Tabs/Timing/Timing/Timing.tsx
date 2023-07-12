@@ -1,12 +1,13 @@
 import {useAppDispatch, useAppSelector} from '../../../hooks/hooks';
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {setSelectedDate} from '../../../store/bll/dateReduser';
 import {DatePicker} from 'react-native-week-month-date-picker';
 import {addDays} from 'date-fns';
 import tw from 'twrnc';
 import {DateInCalendar} from './DateInCalendar/DateInCalendar';
-import {KeyboardAvoidingView} from 'react-native';
+import {ActivityIndicator, KeyboardAvoidingView} from 'react-native';
 import {getTimesTC} from '../../../store/bll/timesReduser';
+import {requestStatus} from '../../../store/bll/appReducer';
 
 export const Timing = () => {
   const dispatch = useAppDispatch();
@@ -18,13 +19,23 @@ export const Timing = () => {
   useEffect(() => {
     dispatch(getTimesTC({dateId}));
   }, [dateId]);
-
   const setDate = useCallback(
     (date: any) => {
       dispatch(setSelectedDate(date));
     },
     [dispatch],
   );
+
+  const {status} = useAppSelector(state => state.app);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (status === requestStatus.LOADING) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  }, [status]);
 
   return (
     // @ts-ignore
@@ -43,6 +54,7 @@ export const Timing = () => {
         primaryColor: 'orange',
       }}>
       <KeyboardAvoidingView behavior="padding" style={tw`flex-1`}>
+        <ActivityIndicator animating={open} />
         <DateInCalendar />
       </KeyboardAvoidingView>
     </DatePicker>

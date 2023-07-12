@@ -6,8 +6,13 @@ export type TimeType = {
   dateId: string;
   timeId: string;
   timeTitle: string;
-  client?: ClientType;
-  training?: TrainingType;
+  client: ClientType | null;
+  training: TrainingType | null;
+};
+export type NewTimeType = {
+  timeTitle?: string;
+  clientId?: string;
+  trainingId?: string;
 };
 export type ClientType = {
   clientId: string;
@@ -15,7 +20,6 @@ export type ClientType = {
   photo?: string;
 };
 export type TrainingType = {
-  timeId: string;
   trainingId: string;
   trainingTitle: string;
   trainingDescription?: string;

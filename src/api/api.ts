@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {ClientType} from '../Types/StateTypes';
+import {ClientType, NewTimeType, TrainingType} from '../Types/StateTypes';
 
 const instance = axios.create({
   baseURL: 'http://localhost:3000',
@@ -30,6 +30,9 @@ export const timeAPI = {
   getTime(timeId: string) {
     return instance.get(`times/${timeId}`);
   },
+  updateTime(timeId: string, time: NewTimeType, dateId: string) {
+    return instance.put(`times/${timeId}`, {time, dateId});
+  },
   writeClient(data: {timeId: string; clientId: string; dateId: string}) {
     return instance.put('times', {
       data,
@@ -48,12 +51,14 @@ export const clientAPI = {
   },
 };
 
-export const trainingAPI = {
-  getTraining(trainingId: string) {
-    return instance.get(`training/${trainingId}`);
+export const myTrainingAPI = {
+  getMyTrainings(params: {trainingTitleSearch: string}) {
+    return instance.get<TrainingType[]>('myTraining', {
+      params,
+    });
   },
-  addTraining(data: {trainingTitle: string; timeId: string; dateId: string}) {
-    return instance.post('training', {
+  addTraining(data: {trainingTitle: string}) {
+    return instance.post('myTraining', {
       data,
     });
   },
@@ -61,14 +66,24 @@ export const trainingAPI = {
     trainingId: string | undefined;
     trainingDescription: string;
   }) {
-    return instance.put(`training/${data.trainingId}`, {
+    return instance.put(`myTraining/${data.trainingId}`, {
+      data,
+    });
+  },
+};
+export const trainingAPI = {
+  getTraining(trainingId: string) {
+    return instance.get(`training/${trainingId}`);
+  },
+  addTraining(data: {trainingTitle: string}) {
+    return instance.post('training', {
       data,
     });
   },
 };
 
 export const exerciseAPI = {
-  addExercise(data: {trainingId: string | undefined; exerciseName: string}) {
+  addExercise(data: {trainingId: string; exerciseName: string}) {
     return instance.post('exercise', {
       data,
     });

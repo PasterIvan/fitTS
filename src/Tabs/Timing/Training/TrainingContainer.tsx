@@ -18,7 +18,6 @@ export const TrainingContainer = ({route}: TrainingProps) => {
   const {trainingTitle, trainingDescription} = useAppSelector(
     state => state.training.training,
   );
-
   const [isInputDescription, setIsInputDescription] = useState(false);
   const [newTrainingDescription, setNewTrainingDescription] = useState('');
   // const [exerciseName, setExerciseName] = useState('12313');

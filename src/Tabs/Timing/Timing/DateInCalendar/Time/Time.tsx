@@ -1,150 +1,142 @@
-import {
-  Dimensions,
-  FlatList,
-  ListRenderItem,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
+import {Alert, Dimensions, Text, TouchableOpacity, View} from 'react-native';
 import tw from 'twrnc';
-import React, {Ref} from 'react';
-import {ClientType, TimeType} from '../../../../../Types/StateTypes';
-import {TimeWithClientContainer} from './TimesVariant/TimeWithClient/TimeWithClientContainer';
-import {TimeWithTrainingContainer} from './TimesVariant/TimeWithTraining/TimeWithTrainingContainer';
-import {ClientsInSearch} from './TimesVariant/FreeTime/SearchClient/ClientsInSearch';
+import React, {useEffect, useState} from 'react';
+import {TimeType} from '../../../../../Types/StateTypes';
 import {FreeTime} from './TimesVariant/FreeTime/FreeTime';
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
+import {useAppDispatch} from '../../../../../hooks/hooks';
+import {repealTrainingTC} from '../../../../../store/bll/timesReduser';
 import Animated, {
+  cancelAnimation,
+  SharedValue,
   useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
-  withTiming,
+  withSpring,
 } from 'react-native-reanimated';
+import {TimeWithClient} from './TimesVariant/TimeWithClient/TimeWithClient';
+import {TimeWithTrainingContainer} from './TimesVariant/TimeWithTraining/TimeWithTrainingContainer';
 
-type TimePropsType = {
-  time: TimeType;
-  clientFromSearch: ClientType;
-  clientsFromSearch: ClientType[];
-  isInputWrite: boolean;
-  openInputWrite: () => void;
-  cancelInputWrite: () => void;
-  onChangeInput: (value: string) => void;
-  writeClient: () => void;
-  simultaneousHandlers: Ref<unknown> | Ref<unknown>[];
+type ContextType = {
+  translateX: number;
 };
 
 const {width: SCREEN_WIDTH} = Dimensions.get('window');
-const TRANSLATE_X_THRESHOLD = -SCREEN_WIDTH * 0.25;
+const TRANSLATE_X_THRESHOLD = -SCREEN_WIDTH * 0.1;
 
-export const Time: React.FC<TimePropsType> = React.memo(
-  ({
-    time,
-    simultaneousHandlers,
-    clientFromSearch,
-    isInputWrite,
-    cancelInputWrite,
-    openInputWrite,
-    onChangeInput,
-    writeClient,
-    clientsFromSearch,
-  }) => {
-    const translateX = useSharedValue(0);
-
-    const panGesture = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>(
-      {
-        onActive: event => {
-          translateX.value = event.translationX;
-        },
-        onEnd: () => {
-          const shouldBeDismissed = translateX.value < TRANSLATE_X_THRESHOLD;
-          if (shouldBeDismissed) {
-            translateX.value = withTiming(-160);
-          } else {
-            translateX.value = withTiming(0);
-          }
-        },
+export const Time = (time: TimeType & {scrollY: SharedValue<number>}) => {
+  const dispatch = useAppDispatch();
+  const [translateX_, setTranslateX] = useState(0);
+  useEffect(() => {
+    setTranslateX(0);
+  }, [time.scrollY.value]);
+  const translateX = useSharedValue(translateX_);
+  const panGesture = useAnimatedGestureHandler<
+    PanGestureHandlerGestureEvent,
+    ContextType
+  >(
+    {
+      onStart: (event, context) => {
+        context.translateX = translateX.value;
+        translateX.value = withSpring(0);
       },
-    );
+      onActive: (event, context) => {
+        translateX.value = event.translationX + context.translateX;
+      },
+      onEnd: () => {
+        const shouldBeDismissed = translateX.value < TRANSLATE_X_THRESHOLD;
+        if (shouldBeDismissed) {
+          translateX.value = withSpring(-133);
+        } else {
+          translateX.value = withSpring(0);
+        }
+      },
+      onCancel: () => {
+        cancelAnimation(translateX);
+      },
+    },
+    [time.scrollY],
+  );
 
-    const rStyle = useAnimatedStyle(() => ({
-      transform: [
+  const rStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        translateX: translateX.value,
+      },
+    ],
+  }));
+
+  const repealTraining = () => {
+    Alert.alert(
+      'Внимание!',
+      `Вы действительно хотите отменить тренировку в ${time.timeTitle} с ${time.client?.clientName}?`,
+      [
         {
-          translateX: translateX.value,
+          text: 'Назад',
+        },
+        {
+          text: 'Подтвердить',
+          onPress: () => {
+            dispatch(repealTrainingTC(time));
+          },
         },
       ],
-    }));
-
-    const renderClient: ListRenderItem<ClientType> = ({item}) => (
-      <ClientsInSearch {...item} />
     );
-    return (
-      <Animated.View>
-        <View style={tw`absolute right-0 h-full flex-1`}>
-          {time.training ? (
-            <View
-              style={tw`absolute right-20 bg-blue-400 w-20 h-full items-center justify-center`}>
-              <Text style={tw`text-center text-red-700`}>
-                Удалить тренировку
+  };
+  return (
+    <Animated.View>
+      <View style={tw`absolute right-1 h-full flex-1 justify-center`}>
+        {time.client ? (
+          time.training ? (
+            <TouchableOpacity
+              onPress={repealTraining}
+              style={tw`bg-red-500 w-30 h-7/10 my-1 border border-red-800  rounded-xl items-center justify-center`}>
+              <Text style={tw`text-center text-xs font-bold text-slate-50`}>
+                Отменить тренировку
               </Text>
-            </View>
+            </TouchableOpacity>
           ) : (
-            <View
-              style={tw`absolute right-20 bg-blue-400 w-20 h-full items-center justify-center`}>
-              <Text style={tw`text-center text-red-700`}>Инфо</Text>
+            <View style={tw`flex-row h-7/10 my-1`}>
+              <TouchableOpacity
+                onPress={repealTraining}
+                style={tw`bg-red-500 w-30 border border-red-800  rounded-xl items-center justify-center`}>
+                <Text style={tw`text-center text-xs font-bold text-slate-50`}>
+                  Отменить тренировку
+                </Text>
+              </TouchableOpacity>
             </View>
-          )}
-          {time.client ? (
-            <View
-              style={tw`bg-orange-400 w-20 h-full items-center justify-center`}>
-              <Text style={tw`text-center text-red-700`}>Удалить клиента</Text>
-            </View>
-          ) : (
-            ''
-          )}
-        </View>
-        <PanGestureHandler
-          simultaneousHandlers={simultaneousHandlers}
-          onGestureEvent={panGesture}>
-          <Animated.View
-            style={[
-              tw`bg-slate-100 w-full flex-row py-2 px-5 border-b border-gray-600 items-center`,
-              rStyle,
-            ]}>
-            <Text style={tw`w-4/25 pr-2 text-base`}>{time.timeTitle}</Text>
-            {time.client ? (
-              time.training ? (
-                <TimeWithTrainingContainer time={time} />
-              ) : (
-                <TimeWithClientContainer
-                  timeId={time.timeId}
-                  client={time.client}
-                />
-              )
-            ) : (
-              <FreeTime
-                clientFromSearch={clientFromSearch}
-                isInputWrite={isInputWrite}
-                openInputWrite={openInputWrite}
-                cancelInputWrite={cancelInputWrite}
-                onChangeInput={onChangeInput}
-                writeClient={writeClient}
-              />
-            )}
-          </Animated.View>
-        </PanGestureHandler>
-
-        {isInputWrite ? (
-          <ScrollView
-            style={tw`bg-orange-400 rounded-lg px-2 w-full max-h-50 text-base text-green-700`}>
-            <FlatList data={clientsFromSearch} renderItem={renderClient} />
-          </ScrollView>
+          )
         ) : (
-          ''
+          <View
+            style={tw`bg-green-500 w-30 h-6/10 my-1 border  border-green-700 rounded-lg items-center justify-center`}>
+            <Text style={tw`text-center font-bold text-slate-50`}>Инфо</Text>
+          </View>
         )}
-      </Animated.View>
-    );
-  },
-);
+      </View>
+      <PanGestureHandler
+        onGestureEvent={panGesture}
+        failOffsetY={[-1, 1]}
+        activeOffsetX={[-1, 1]}>
+        <Animated.View
+          style={[
+            tw`bg-stone-100 w-9.9/10 flex-row py-2 px-5 m-0.5 border rounded-lg border-gray-600 items-center`,
+            rStyle,
+          ]}>
+          <Text style={tw`w-4/25 pr-2 text-base`}>{time.timeTitle}</Text>
+          {time.client ? (
+            time.training ? (
+              <TimeWithTrainingContainer time={time} />
+            ) : (
+              <TimeWithClient time={time} />
+            )
+          ) : (
+            <FreeTime time={time} />
+          )}
+        </Animated.View>
+      </PanGestureHandler>
+    </Animated.View>
+  );
+};

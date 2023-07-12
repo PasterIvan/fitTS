@@ -8,8 +8,9 @@ import {RootTiming} from './src/Tabs/Timing/RootTiming';
 import {RootProfile} from './src/Tabs/Profile/RootProfile';
 import {RootTabParamList} from './src/Types/TabsNavigationsTypes';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {Provider} from 'react-redux';
 import {store} from './src/store/store';
+import React from 'react';
+import {Provider} from 'react-redux';
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 

@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {TrainingType} from '../../Types/StateTypes';
-import {exerciseAPI, trainingAPI} from '../../api/api';
+import {exerciseAPI, myTrainingAPI, trainingAPI} from '../../api/api';
 
 //THUNKS
 export const getTrainingTC = createAsyncThunk(
@@ -16,10 +16,7 @@ export const getTrainingTC = createAsyncThunk(
 );
 export const addExerciseTC = createAsyncThunk(
   'training/addExercise',
-  async (
-    data: {trainingId: string | undefined; exerciseName: string},
-    {dispatch},
-  ) => {
+  async (data: {trainingId: string; exerciseName: string}, {dispatch}) => {
     try {
       const res = await exerciseAPI.addExercise(data);
       dispatch(setTraining(res.data));
@@ -36,7 +33,7 @@ export const addTrainingDescriptionTC = createAsyncThunk(
     {dispatch},
   ) => {
     try {
-      const res = await trainingAPI.addTrainingDescription(data);
+      const res = await myTrainingAPI.addTrainingDescription(data);
       dispatch(setTraining(res.data));
     } catch (error) {
       console.log(error);

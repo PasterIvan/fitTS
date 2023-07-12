@@ -19,6 +19,7 @@ export const ExercisesContainer = () => {
   const openInput = () => {
     setIsInputTraining(true);
   };
+
   const addExercise = () => {
     dispatch(addExerciseTC({trainingId, exerciseName}));
     setIsInputTraining(false);

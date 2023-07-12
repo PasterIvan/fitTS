@@ -1,17 +1,19 @@
 import React from 'react';
 import {Image, View, Text, TouchableOpacity} from 'react-native';
 import tw from 'twrnc';
-import {ClientType, TrainingType} from '../../../../../../../Types/StateTypes';
+import {
+  ClientType,
+  TimeType,
+  TrainingType,
+} from '../../../../../../../Types/StateTypes';
 
 type TimeWithTrainingProps = {
-  client: ClientType | undefined;
-  training: TrainingType | undefined;
+  time: TimeType;
   watchTraining: () => void;
 };
 
 export const TimeWithTraining: React.FC<TimeWithTrainingProps> = ({
-  client,
-  training,
+  time,
   watchTraining,
 }) => {
   return (
@@ -21,10 +23,10 @@ export const TimeWithTraining: React.FC<TimeWithTrainingProps> = ({
           style={tw`w-10 h-10 rounded-full`}
           source={require('../../../../../../Profile/img/ava-man.png')}
         />
-        <Text style={tw`text-gray-600`}>{client?.clientName}</Text>
+        <Text style={tw`text-gray-600`}>{time.client?.clientName}</Text>
       </View>
       <Text style={tw` w-8/25 pr-2 text-base font-semibold text-center`}>
-        {training?.trainingTitle}
+        {time.training?.trainingTitle}
       </Text>
       <TouchableOpacity style={tw`w-6/14 items-center`} onPress={watchTraining}>
         <Text style={tw`px-5 w-full text-base`}>Смотреть</Text>

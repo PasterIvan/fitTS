@@ -11,18 +11,20 @@ import {
 } from './bll/exercisesReduser';
 import {
   ActionsTypeForClientSearchReducer,
-  clientSearchReducer,
-} from '../Tabs/Timing/Timing/DateInCalendar/Time/TimesVariant/FreeTime/SearchClient/clientSearchReduser';
+  searchReducer,
+} from '../Tabs/Timing/Modals/Search/searchReduser';
 import {
   ActionsTypeForTrainingReducer,
   trainingReducer,
 } from './bll/trainingReduser';
+import {ActionsTypeFromAppReducer, appReducer} from './bll/appReducer';
 
 export const rootReducer = combineReducers({
+  app: appReducer,
   me: meReducer,
   date: dateReducer,
   times: timesReducer,
-  clientsFromSearch: clientSearchReducer,
+  search: searchReducer,
   training: trainingReducer,
   exercises: exercisesReducer,
 });
@@ -35,18 +37,20 @@ export const store = configureStore({
 });
 store.subscribe(() => {
   storeData({
+    app: store.getState().app,
     me: store.getState().me,
     date: store.getState().date,
     times: store.getState().times,
     training: store.getState().training,
     exercises: store.getState().exercises,
-    clientsFromSearch: store.getState().clientsFromSearch,
+    search: store.getState().search,
   });
 });
 
 export type AppDispatch = ThunkDispatch<AppStateType, unknown, ActionsType>;
 
 export type ActionsType =
+  | ActionsTypeFromAppReducer
   | ActionTypeForDataReducer
   | ActionsTypeForMeReducer
   | ActionsTypeFromTimesReducer

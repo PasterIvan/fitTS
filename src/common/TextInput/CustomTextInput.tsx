@@ -3,37 +3,39 @@ import {Text, TextInput, TouchableOpacity, View} from 'react-native';
 import tw from 'twrnc';
 
 type CustomTextInputProps = {
-  cancelInput: () => void;
+  cancelModal: () => void;
   onChangeInput: (value: string) => void;
   action: () => void;
+  disabled: boolean;
 };
 
 export const CustomTextInput: React.FC<CustomTextInputProps> = ({
   onChangeInput,
-  cancelInput,
+  cancelModal,
   action,
+  disabled,
 }) => {
   return (
-    <View style={tw`flex-row w-full pr-2 text-base items-center`}>
+    <View style={tw`w-full flex-row text-base items-center`}>
       <TextInput
-        style={tw`w-15/25 h-full text-left mr-4`}
+        style={tw`w-9/25 h-full text-base text-left mx-4`}
         multiline={true}
         numberOfLines={3}
         onChangeText={value => onChangeInput(value)}
         autoFocus={true}
-        onEndEditing={cancelInput}
+        onEndEditing={cancelModal}
       />
-      <View style={tw` items-center`}>
-        <TouchableOpacity onPress={cancelInput}>
-          <Text style={tw`px-2 pb-2 w-full text-base text-red-700`}>
-            Отмена
-          </Text>
+      <View style={tw`w-7/25 items-center`}>
+        <TouchableOpacity
+          style={tw`w-full bg-red-500 border border-red-800 rounded-xl my-0.5 py-4 items-center`}
+          onPress={cancelModal}>
+          <Text style={tw`text-base font-bold text-slate-50 `}>Отмена</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => {
-            action();
-          }}>
-          <Text style={tw`px-2 w-full text-base text-green-700`}>Добавить</Text>
+          style={tw`w-full bg-green-500 border border-green-800 rounded-xl my-0.5 py-4 items-center`}
+          onPress={action}
+          disabled={disabled}>
+          <Text style={tw`text-base font-bold text-slate-50`}>Добавить</Text>
         </TouchableOpacity>
       </View>
     </View>

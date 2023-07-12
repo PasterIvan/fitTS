@@ -22,12 +22,5 @@ export const TimeWithTrainingContainer: React.FC<
       },
     });
   };
-
-  return (
-    <TimeWithTraining
-      client={time.client}
-      training={time.training}
-      watchTraining={watchTraining}
-    />
-  );
+  return <TimeWithTraining time={time} watchTraining={watchTraining} />;
 };

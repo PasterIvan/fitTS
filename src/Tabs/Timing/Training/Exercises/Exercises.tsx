@@ -34,7 +34,7 @@ export const Exercises: React.FC<ExercisesProps> = ({
       {isInputTraining ? (
         <CustomTextInput
           action={addExercise}
-          cancelInput={cancelInput}
+          cancelModal={cancelInput}
           onChangeInput={onChangeInput}
         />
       ) : (

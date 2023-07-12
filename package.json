@@ -19,6 +19,7 @@
     "@types/react-native-vector-icons": "^6.4.12",
     "axios": "^1.2.1",
     "date-fns": "^2.29.3",
+    "dayjs": "^1.11.7",
     "react": "18.1.0",
     "react-native": "0.70.6",
     "react-native-bouncy-checkbox": "^3.0.6",

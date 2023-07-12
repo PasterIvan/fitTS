@@ -1,14 +1,24 @@
-import {Image, ScrollView, Text, View} from 'react-native';
+import {Button, Image, ScrollView, Text, TextInput, View} from 'react-native';
 import {WithSafeAreaView} from '../../../ComponentHelper/WithSafeAreaView';
 import tw from 'twrnc';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {useAppSelector} from '../../../hooks/hooks';
+import {
+  useAppDispatch,
+  useAppNavigation,
+  useAppSelector,
+} from '../../../hooks/hooks';
 import {RootProfileTabProps} from '../../../Types/TabsNavigationsTypes';
-import React from 'react';
+import React, {useCallback, useState} from 'react';
+import {addTrainingTC} from '../../../store/bll/timesReduser';
 
 export const MeProfile: React.FC<any> = ({navigation}: RootProfileTabProps) => {
+  const dispatch = useAppDispatch();
   const {name, address, club, aboutMe} = useAppSelector(state => state.me.me);
+  const [trainingTitle, setTrainingTitleSearch] = useState('');
 
+  const addTraining = useCallback(() => {
+    dispatch(addTrainingTC({trainingTitle}));
+  }, [dispatch, trainingTitle]);
   return (
     <WithSafeAreaView>
       <View style={tw`flex-1`}>
@@ -31,6 +41,8 @@ export const MeProfile: React.FC<any> = ({navigation}: RootProfileTabProps) => {
             }
           />
         </View>
+        <TextInput onChangeText={setTrainingTitleSearch} />
+        <Button title={'Добавить тренировку'} onPress={addTraining} />
         <View style={tw`h-50 mt-5`}>
           <ScrollView>
             <Text style={tw`text-gray-600`}>{aboutMe}</Text>
